@@ -10,12 +10,16 @@ import MUILink from './MUILink.jsx';
 import { DarkTheme } from './Theme.jsx';
 
 
+// theme.palette.grey[900]
+const BackgroundColor = "rgba(20, 50, 53)";
+
+
 const Footer = (props) => (<footer {... props}/>);
 const Div = (props) => (<div {... props}/>);
 
 //theme.palette.secondary.main
 const DarkFooter = styled(Footer)(({theme}) => ({
-    backgroundColor: theme.palette.grey[900],
+    backgroundColor: BackgroundColor,
     padding: theme.spacing(2),
     textAlign: 'center',
     maxWidth: '100vw',

@@ -17,12 +17,16 @@ import { DarkTheme } from './Theme.jsx';
 
 
 
-const AppBarColor = blueGrey[800].substring(1);
-const AppBarColorInt = parseInt(AppBarColor, 16);
+// const AppBarColor = blueGrey[800].substring(1);
+// const AppBarColorInt = parseInt(AppBarColor, 16);
+// const AppBarColorChannels = [
+//     (AppBarColorInt >> 16) & 0xFF,
+//     (AppBarColorInt >> 8) & 0xFF,
+//     (AppBarColorInt) & 0xFF,
+// ];
+
 const AppBarColorChannels = [
-    (AppBarColorInt >> 16) & 0xFF,
-    (AppBarColorInt >> 8) & 0xFF,
-    (AppBarColorInt) & 0xFF,
+    20, 50, 53
 ];
 
 
@@ -85,13 +89,16 @@ export default function Header({ isLight }) {
                     MedTechWare
                   </Typography>
                 </Link>
-                <span style={{ flexGrow: 1, marginLeft: '10%', marginRight: '10%' }}>
-                  { displaySearchBar &&
-                    (
+
+                { displaySearchBar
+                  ? (
+                      <span style={{ flexGrow: 1, marginLeft: '5%', marginRight: '5%' }}>
                         <SearchBar/>
-                    )
-                  }
-                </span>
+                      </span>
+                  ) : (
+                      <span style={{ flexGrow: 1 }}/>
+                  )
+                }
                 { session
                   ? (
                       <>
@@ -103,15 +110,17 @@ export default function Header({ isLight }) {
                         </IconButton>
                       </>
                   ) : (
-                      <Link href='/sign-in'>
+                      <>
+                      <Link href='/auth'>
                         <ColorButton
                           variant='contained'
                           style={{whiteSpace: 'nowrap'}}
                           disableElevation
                         >
-                          Shop
+                          Access
                         </ColorButton>
                       </Link>
+                      </>
                   )
                 }
 

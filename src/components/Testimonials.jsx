@@ -76,7 +76,7 @@ const Testimonials = () => {
                         </Typography>
                       </>
                   }
-                  variant="outlined"
+                  variant="filled"
                 />
               </Grid>
           ))}

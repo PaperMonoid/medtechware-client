@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { styled, ThemeProvider } from '@mui/material/styles';
-import { grey, deepOrange } from '@mui/material/colors';
+import { grey, deepOrange, pink } from '@mui/material/colors';
 
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import {
@@ -16,9 +17,10 @@ import {
 
 import Layout from "../components/Layout.jsx";
 import MUILink from "../components/MUILink.jsx";
-import { LightTheme } from '../components/Theme.jsx';
+import { LightTheme, DarkTheme } from '../components/Theme.jsx';
 import Background from "../components/HomeBackground.jsx";
 import Testimonials from "../components/Testimonials.jsx";
+import ContactForm from "../components/forms/ContactForm.jsx";
 
 const SubtitleTypography = styled(Typography)(({ theme }) => ({
     color: grey[400],
@@ -51,7 +53,31 @@ const AboutSection = styled(Container)(({ theme }) => ({
 }));
 
 
+const SloganSection = styled(Container)(({ theme }) => ({
+    width: '100%',
+    background: theme.palette.primary.main,
+    color: theme.palette.text.primary,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '50px',
+}));
+
 const TestimonialsSection = styled(Container)(({ theme }) => ({
+    width: '100%',
+    backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(/craiyon_011310_medical_tools_pastel_colors_svg_seamless_tileable_pattern_blurred.png)',
+    backgroundSize: 'cover',
+    backgroundPosition: '0% 0%',
+    //background: theme.palette.grey[900],
+    color: theme.palette.text.primary,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '50px',
+}));
+
+
+const ContactSection = styled(Container)(({ theme }) => ({
     width: '100%',
     background: theme.palette.grey[100],
     color: theme.palette.text.primary,
@@ -86,6 +112,45 @@ const styles = {
 
 
 export default function Home() {
+    const bigVariants = [ "h2", "h1", "h4", "h3", "body2", "h3", "caption"];
+    const normalVariants = [ "h3", "h2", "h5", "h4", "body2", "h4", "caption"];
+    const mobileVariants = [ "h5", "h4", "h7", "h6", "body2", "h6", "caption"];
+
+
+    const getVariants = () => {
+        if (window.innerWidth >= 1050 && window.innerHeight >= 750) {
+            return bigVariants;
+        } else if (window.innerWidth >= 600 && window.innerHeight >= 600) {
+            return normalVariants;
+        } else {
+            return mobileVariants;
+        }
+    };
+    const getXs = () => {
+        if (window.innerWidth >= 600) {
+            return 6;
+        } else {
+            return 12;
+        }
+    };
+    const defaultVariants =  getVariants();
+    const [ heroVariants, setHeroVariants ] = useState(defaultVariants);
+    const [ aboutXs, setAboutXs ] = useState(getXs());
+
+
+    useEffect(() => {
+
+        const handleResize = () => {
+            setHeroVariants(getVariants());
+            setAboutXs(getXs());
+        };
+
+        window.addEventListener('resize', handleResize, false);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
         <Layout>
           <HeroSection maxWidth={false}>
@@ -93,35 +158,34 @@ export default function Home() {
               <div style={styles.divisor}/>
               <Grid container item spacing={2} xs={9}>
                 <Grid item xs={12}>
-                  <Typography variant="h5">
-                    Welcome to <Typography variant="h4" component="span">MedTechWare</Typography>
+                  <Typography variant={heroVariants[0]}>
+                    Welcome to <Typography variant={heroVariants[1]} component="span">MedTechWare</Typography>
                   </Typography>
                   <div>
-                    <Typography variant="h7" gutterBottom>
+                    <Typography variant={heroVariants[2]} gutterBottom>
                       Your future of personalized{' '}
-                      <Typography variant="h6" component="span" color="primary">
+                      <Typography variant={heroVariants[3]} component="span" color="primary">
                         Health Technology
                       </Typography>
                     </Typography>
                   </div>
-                  <br/>
-                  <SubtitleTypography variant="body2" style={{ width: '70%'}}>
+                  <SubtitleTypography variant={heroVariants[4]} style={{ width: '70%'}}>
                     Discover our cutting-edge health monitoring devices, designed to empower you on your health journey.
                   </SubtitleTypography>
                 </Grid>
                 <Grid item style={styles.flexGrow}>
                 </Grid>
                 <Grid item xs={12}>
-                  <div style={{ display: 'flex', gap: '15px' }}>
-                    <Typography variant="h6" component='span'>
-                      Get started now!
+                  <div style={{ display: 'flex', gap: '15px', display: 'flex', alignItems: 'center',  }}>
+                    <Typography variant={heroVariants[5]} component='span'>
+                      Get started!
                     </Typography>
                     <Link href='/auth'>
-                      <ColorButton>Shop</ColorButton>
+                      <ColorButton>Shop now</ColorButton>
                     </Link>
                   </div>
-                  <SubtitleTypography variant="caption">
-                    <MUILink href='/auth' style={{ textDecoration: 'underline' }}>Sign in</MUILink> and experience health technology like never before.
+                  <SubtitleTypography variant={heroVariants[6]}>
+                    <MUILink href='/auth' style={{ textDecoration: 'underline', color: deepOrange[500] }}>Access</MUILink> and experience health technology like never before.
                   </SubtitleTypography>
                 </Grid>
               </Grid>
@@ -133,14 +197,14 @@ export default function Home() {
             <ThemeProvider theme={LightTheme}>
               <Grid container item spacing={2} xs={9}>
                 <Grid item xs={12}>
-                  <Typography variant="body1">
-                    At MedTechWare, we're committed to transforming lives through our personalized health monitoring technology. We offer a wide range of products and services tailored to various health needs:
+                  <Typography variant="h5" color="secondary">
+                    At MedTechWare, we're committed to transforming lives through our personalized health monitoring technology. We offer a wide range of products and services tailored to various health needs.
                   </Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={aboutXs}>
         <img src='/craiyon_003911_diverse_range_of_individuals_engaged_in_various_health_related_activities_in_minimalist_corporate_art_style.png' style={{ width: '100%' }}/>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={aboutXs}>
                   <List>
                     <ListItem>
                       <ListItemIcon>
@@ -180,20 +244,55 @@ export default function Home() {
                     </ListItem>
                   </List>
                 </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    MedTechWare. Here to help you live your healthiest life.
-                  </Typography>
-                </Grid>
               </Grid>
             </ThemeProvider>
           </AboutSection>
 
+          <SloganSection maxWidth={false}>
+            <Grid container item xs={12} style={{ textAlign: 'center', color: pink[100] }}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    <span style={{ fontWeight: 900 }}>MedTechWare</span>. Here to help <span style={{ fontWeight: 900 }}>you</span> live your healthiest life.
+                  </Typography>
+                </Grid>
+            </Grid>
+          </SloganSection>
+
           <TestimonialsSection maxWidth={false}>
-            <ThemeProvider theme={LightTheme}>
-              <Testimonials/>
+            <ThemeProvider theme={DarkTheme}>
+              <Grid container item xs={9}>
+                <Grid item xs={12}>
+                  <Typography variant="h4" color={DarkTheme.palette.grey[100]}>Testimonials</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Testimonials/>
+                </Grid>
+              </Grid>
             </ThemeProvider>
           </TestimonialsSection>
+
+          <ContactSection maxWidth={false}>
+            <ThemeProvider theme={LightTheme}>
+              <Grid container item xs={9}>
+                <Grid item xs={12}>
+                  <Typography variant="h4" color='secondary'>
+                    Contact us
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="subtitle2" color='secondary' component='div'>
+                    We're always here to help. Feel free to reach out with any questions or feedback.
+                  </Typography>
+                  <Typography variant="caption" color='secondary' style={{ verticalAlign: 'top', fontSize: '0.5em'}}>
+                    Please note that this form will direct your message to the creator's personal email as MedTechWare is a fictitious company for portfolio demonstration.
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <ContactForm/>
+                </Grid>
+              </Grid>
+            </ThemeProvider>
+          </ContactSection>
         </Layout>
     );
 }
