@@ -11,7 +11,7 @@ const AuthForm = ({ onAccountExists, onAccountDoesNotExist }) => {
 
   const onSubmit = async (data) => {
       const { email } = data;
-      Router.push('/auth/sign-in');
+      Router.push(`/auth/sign-in#${btoa(email)}`);
     setIsChecking(true);
 
     try {

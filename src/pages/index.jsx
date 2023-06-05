@@ -133,8 +133,7 @@ export default function Home() {
             return 12;
         }
     };
-    const defaultVariants =  getVariants();
-    const [ heroVariants, setHeroVariants ] = useState(defaultVariants);
+    const [ heroVariants, setHeroVariants ] = useState(getVariants());
     const [ aboutXs, setAboutXs ] = useState(getXs());
 
 

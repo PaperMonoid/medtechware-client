@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -12,10 +13,18 @@ const ContactForm = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      // Send the email
-      await sendEmail(data);
+      const response = await fetch('https://formsubmit.co/16667d1e2608b058543fdf406b6e1fac', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-      // Reset the form and show success message
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
       reset();
       setIsSubmitted(true);
     } catch (error) {
@@ -26,31 +35,6 @@ const ContactForm = () => {
     }
   };
 
-  const sendEmail = async (data) => {
-    const { name, email, message } = data;
-
-    // Here, you can use your preferred method for sending an email, e.g. an API call or a server-side function
-    // For simplicity, let's assume we're sending a POST request to an API endpoint
-    const response = await fetch('/api/send-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        to: 'example@gmail.com',
-        subject: 'Contact Form Submission',
-        text: `
-          Name: ${name}
-          Email: ${email}
-          Message: ${message}
-        `,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to send email');
-    }
-  };
 
   return (
       <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
@@ -67,7 +51,11 @@ const ContactForm = () => {
       <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
         Submit
       </Button>
-      {isSubmitted && <p>Thank you for your message!</p>}
+        {isSubmitted &&
+         <Typography variant='h5' color='secondary'>
+           <span style={{ fontWeight: 900 }}>Thank you</span> for your message!
+         </Typography>
+        }
     </form>
   );
 };
