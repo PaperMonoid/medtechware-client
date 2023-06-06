@@ -1,4 +1,4 @@
-const ServerURL = 'http://localhost:3001';
+const ServerURL = process.env.NEXT_PUBLIC_SERVER;
 import AuthService from './AuthService.js';
 
 function createShoppingCartService() {

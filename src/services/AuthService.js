@@ -1,4 +1,4 @@
-const ServerURL = 'http://localhost:3001';
+const ServerURL = process.env.NEXT_PUBLIC_SERVER;
 
 function createAuthService() {
     let jwt = null;

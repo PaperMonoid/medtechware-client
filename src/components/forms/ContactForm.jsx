@@ -13,7 +13,7 @@ const ContactForm = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('https://formsubmit.co/16667d1e2608b058543fdf406b6e1fac', {
+      const response = await fetch(process.env.NEXT_PUBLIC_EMAIL_SUBMIT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
