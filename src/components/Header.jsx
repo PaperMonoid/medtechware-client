@@ -8,10 +8,15 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import CssBaseline from "@mui/material/CssBaseline";
+import Router from 'next/router';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { amber, blueGrey, deepOrange, teal } from '@mui/material/colors';
 
+
+import AuthService from '../services/AuthService.js';
 import SearchBar from './SearchBar.jsx';
 import { DarkTheme } from './Theme.jsx';
 
@@ -43,10 +48,31 @@ const ColorButton = styled(Button)(({ theme }) => ({
 export default function Header({ isLight }) {
     const [ alpha, setAlpha ] = useState(isLight? 1 : 0);
     const [ displaySearchBar, setDisplaySearchBar ] = useState(window.innerWidth >= 600);
-    const session = null;
+    const [ session, setSession ] = useState(null);
+
+    const [anchorElUser, setAnchorElUser] = useState(null);
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+    const handleCloseUserMenu = (callback) => {
+        setAnchorElUser(null);
+        if (callback) {
+            callback();
+        }
+    };
+
+    const logout = () => {
+	AuthService.logout();
+        setSession(null);
+        Router.push('/');
+    };
+
+
     const rgba = `${AppBarColorChannels[0]}, ${AppBarColorChannels[1]}, ${AppBarColorChannels[2]}, ${alpha}`;
 
     useEffect(() => {
+        setSession(AuthService.isLoggedIn());
+
         if (!isLight) {
             const handleScroll = () => {
                 setAlpha(Math.min(window.pageYOffset / 64.0, 1));
@@ -104,10 +130,46 @@ export default function Header({ isLight }) {
                       <>
                         <IconButton>
                           <ShoppingCartIcon/>
-                        </IconButton>
-                        <IconButton>
+                      </IconButton>
+                        <IconButton
+                        onClick={handleOpenUserMenu}
+                        >
                           <AccountCircleIcon/>
                         </IconButton>
+                        <Menu
+                          id="menu-appbar"
+                          anchorEl={anchorElUser}
+                          anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                          }}
+                          keepMounted
+                          transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                          }}
+                          open={Boolean(anchorElUser)}
+                          onClose={() => handleCloseUserMenu()}
+                        >
+                          {
+                              AuthService.isAdmin() &&
+                                  <MenuItem key={1}
+                                      style={{ color: DarkTheme.palette.grey[100], background: DarkTheme.palette.grey['900']}}>
+                                    <Typography
+                                      textAlign="center"
+                              style={{ fontWeight: 900, fontSize: '1.2em' }}
+                                    >
+                                      Admin Mode
+                                    </Typography>
+                                  </MenuItem>
+                          }
+                          <MenuItem key={2} onClick={() => handleCloseUserMenu()}>
+                            <Typography textAlign="center">Orders</Typography>
+                          </MenuItem>
+                          <MenuItem key={3} onClick={() => handleCloseUserMenu(logout)}>
+                            <Typography textAlign="center">Log out</Typography>
+                          </MenuItem>
+                        </Menu>
                       </>
                   ) : (
                       <>

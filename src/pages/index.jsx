@@ -21,6 +21,7 @@ import { LightTheme, DarkTheme } from '../components/Theme.jsx';
 import Background from "../components/HomeBackground.jsx";
 import Testimonials from "../components/Testimonials.jsx";
 import ContactForm from "../components/forms/ContactForm.jsx";
+import AuthService from '../services/AuthService.js';
 
 const SubtitleTypography = styled(Typography)(({ theme }) => ({
     color: grey[400],
@@ -112,6 +113,8 @@ const styles = {
 
 
 export default function Home() {
+    const [ session, setSession ] = useState(null);
+
     const bigVariants = [ "h2", "h1", "h4", "h3", "body2", "h3", "caption"];
     const normalVariants = [ "h3", "h2", "h5", "h4", "body2", "h4", "caption"];
     const mobileVariants = [ "h5", "h4", "h7", "h6", "body2", "h6", "caption"];
@@ -138,6 +141,7 @@ export default function Home() {
 
 
     useEffect(() => {
+        setSession(AuthService.isLoggedIn());
 
         const handleResize = () => {
             setHeroVariants(getVariants());
@@ -179,13 +183,15 @@ export default function Home() {
                     <Typography variant={heroVariants[5]} component='span'>
                       Get started!
                     </Typography>
-                    <Link href='/auth'>
+                    <Link href='/catalog'>
                       <ColorButton>Shop now</ColorButton>
                     </Link>
                   </div>
-                  <SubtitleTypography variant={heroVariants[6]}>
-                    <MUILink href='/auth' style={{ textDecoration: 'underline', color: deepOrange[500] }}>Access</MUILink> and experience health technology like never before.
-                  </SubtitleTypography>
+                  { !AuthService.isLoggedIn() &&
+                      <SubtitleTypography variant={heroVariants[6]}>
+                        <MUILink href='/auth' style={{ textDecoration: 'underline', color: deepOrange[500] }}>Access</MUILink> and experience health technology like never before.
+                      </SubtitleTypography>
+                  }
                 </Grid>
               </Grid>
             </div>

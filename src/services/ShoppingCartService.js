@@ -1,10 +1,11 @@
-const ServerURL = 'http://localhost:3000';
+const ServerURL = 'http://localhost:3001';
+import AuthService from './AuthService.js';
 
 function createShoppingCartService() {
     async function addToCart(productId, quantity) {
         const body = JSON.stringify({ productId, quantity });
 
-        return authService.fetchWithAuth(`${ServerURL}/api/cart`, {
+        return AuthService.fetchWithAuth(`${ServerURL}/cart/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,7 +19,7 @@ function createShoppingCartService() {
     }
 
     async function getCart() {
-        return authService.fetchWithAuth(`${ServerURL}/api/cart`)
+        return AuthService.fetchWithAuth(`${ServerURL}/cart`)
         .then(response => {
             if (!response.ok) throw new Error('Error fetching cart');
             return response.json();
@@ -26,9 +27,9 @@ function createShoppingCartService() {
     }
 
     async function updateCartItem(cartItemId, quantity) {
-        const body = JSON.stringify({ quantity });
+        const body = JSON.stringify({ cartItemID, quantity });
 
-        return authService.fetchWithAuth(`${ServerURL}/api/cart/${cartItemId}`, {
+        return AuthService.fetchWithAuth(`${ServerURL}/cart/update`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,8 +43,13 @@ function createShoppingCartService() {
     }
 
     async function removeCartItem(cartItemId) {
-        return authService.fetchWithAuth(`${ServerURL}/api/cart/${cartItemId}`, {
+	const body = JSON.stringify({ cartItemId })
+        return AuthService.fetchWithAuth(`${ServerURL}/cart/remove`, {
             method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body,
         })
         .then(response => {
             if (!response.ok) throw new Error('Error removing cart item');

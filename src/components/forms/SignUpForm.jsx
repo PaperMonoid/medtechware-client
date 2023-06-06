@@ -5,12 +5,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Router from 'next/router';
 
 import Link from '../MUILink.jsx';
+import AuthService from '../../services/AuthService.js';
 
 const SignUpForm = () => {
-
-
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState(null);
     let email = null;
     if (window.location.hash) {
@@ -37,9 +38,19 @@ const SignUpForm = () => {
         }
     });
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
+        setIsLoading(true);
         setFormData(data);
-        // Perform additional signup logic here...
+        try {
+            const token = await AuthService.signin(data);
+            if (token) {
+                Router.push('/');
+            }
+            setIsLoading(false);
+        } catch(error) {
+            setIsLoading(false);
+            console.error(error);
+        }
     };
 
     return (
@@ -79,7 +90,7 @@ const SignUpForm = () => {
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword?.message}
           />
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
             Sign Up
           </Button>
           <Typography variant='caption'>

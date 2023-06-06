@@ -8,7 +8,7 @@ import { ThemeProvider, styled } from '@mui/material/styles';
 
 import Layout from "../../../components/Layout.jsx";
 import { DarkTheme, LightTheme } from "../../../components/Theme.jsx";
-import SignUpForm from "../../../components/forms/SignUpForm.jsx";
+import LogInForm from "../../../components/forms/LogInForm.jsx";
 
 
 const backgroundStyle = {
@@ -37,7 +37,7 @@ const Section = styled(Container)(({ theme }) => ({
     marginTop: '-64px',
 }));
 
-export default function SignIn() {
+export default function LogIn() {
     const variants = {
         "normal": ["h4", "subtitle1", "body1"],
         "mobile": ["h6", "subtitle1", "caption"],
@@ -56,14 +56,14 @@ export default function SignIn() {
             return [12, 12];
         }
     };
-    const [ signInXs, setSignInXs ] = useState(getXs());
-    const [ signInVariants, setSignInVariants ] = useState(getVariants());
+    const [ logInXs, setLogInXs ] = useState(getXs());
+    const [ logInVariants, setLogInVariants ] = useState(getVariants());
 
 
     useEffect(() => {
         const handleResize = () => {
-            setSignInXs(getXs());
-            setSignInVariants(getVariants());
+            setLogInXs(getXs());
+            setLogInVariants(getVariants());
         };
 
         window.addEventListener('resize', handleResize, false);
@@ -78,20 +78,17 @@ export default function SignIn() {
             <CssBaseline />
             <Section maxWidth={false}>
               <div style={backgroundStyle}></div>
-              <Grid container item spacing={2} xs={signInXs[0]}>
-                <Grid item xs={signInXs[1]}>
-                  <Typography variant={signInVariants[0]} component="h1" gutterBottom>
-                    Join MedTechWare Community
+              <Grid container item spacing={2} xs={logInXs[0]}>
+                <Grid item xs={logInXs[1]}>
+                  <Typography variant={logInVariants[0]} component="h1" gutterBottom>
+                    Welcome back!
                   </Typography>
-                  <Typography variant={signInVariants[1]} gutterBottom>
+                  <Typography variant={logInVariants[1]} gutterBottom>
                     Access Personalized Health Technology
                   </Typography>
-                  <Typography variant={signInVariants[2]} gutterBottom>
-                    Explore our range of innovative health monitoring devices and services designed to enhance your well-being.
-                  </Typography>
                 </Grid>
-                <Grid item xs={signInXs[1]}>
-                  <SignUpForm/>
+                <Grid item xs={logInXs[1]}>
+                  <LogInForm/>
                 </Grid>
               </Grid>
 	    </Section>
