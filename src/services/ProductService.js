@@ -1,4 +1,4 @@
-const ServerURL = process.env.NEXT_PUBLIC_SERVER;
+const ServerURL = process.env.NEXT_PUBLIC_SERVER_URL;
 import AuthService from './AuthService.js';
 
 const productService = (() => {
